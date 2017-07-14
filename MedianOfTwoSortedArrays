@@ -1,0 +1,28 @@
+class Solution(object):
+    def findMedianSortedArrays(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: float
+        """
+        if len(nums1) is 0:
+            return self.findMedian(nums2)
+        if len(nums2) is 0:
+            return self.findMedian(nums1)
+        if len(nums1) in [2, 1] or len(nums2) in [1, 2]:
+            arr = nums1 + nums2
+            arr.sort()
+            return self.findMedian(arr)
+        med1 = self.findMedian(nums1)
+        med2 = self.findMedian(nums2)
+        if med1 == med2:
+            return med1
+        cutNum = int(len(nums1)/2) if len(nums1) < len(nums2) else int(len(nums2)/2)
+        if cutNum > 1:
+            cutNum -= 1
+        if med1 < med2:
+            return self.findMedianSortedArrays(nums1[cutNum:], nums2[0:len(nums2)-cutNum])
+        return self.findMedianSortedArrays(nums1[0:len(nums1)-cutNum], nums2[cutNum:])
+    
+    def findMedian(self, arr):
+        return arr[(len(arr)-1)/2] if len(arr)%2 == 1 else (arr[len(arr)/2]+arr[len(arr)/2-1])/2.0 
